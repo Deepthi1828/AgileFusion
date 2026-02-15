@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgileFusion - Projects</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-link {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: 230px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        input, select {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            background: red;
+            padding: 5px 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+    <div class="logo">🚀 AgileFusion</div>
+
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="projects.html" class="nav-link active">Projects</a>
+    <a href="kanban.html" class="nav-link">Kanban</a>
+    <a href="sprints.html" class="nav-link">Sprints</a>
+    <a href="reports.html" class="nav-link">Reports</a>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+    <div class="topbar">
+        <div>Project Management</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+
+        <!-- ADD PROJECT FORM -->
+        <div class="card">
+            <h3>Add New Project</h3>
+
+            <input type="text" id="name" placeholder="Project Name">
+            <input type="text" id="owner" placeholder="Owner">
+
+            <select id="priority">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+
+            <select id="status">
+                <option value="Planning">Planning</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+
+            <input type="date" id="deadline">
+            <input type="number" id="progress" placeholder="Progress (%)">
+
+            <button onclick="addProject()">Add Project</button>
+        </div>
+
+        <!-- PROJECT LIST -->
+        <div class="card">
+            <h3>Project Portfolio</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Owner</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Deadline</th>
+                        <th>Progress</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTable"></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+async function loadProjects() {
+    const res = await fetch("/getProjects");
+    const projects = await res.json();
+
+    const table = document.getElementById("projectTable");
+    table.innerHTML = "";
+
+    projects.forEach(project => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${project.name}</td>
+            <td>${project.owner}</td>
+            <td>${project.priority}</td>
+            <td>${project.status}</td>
+            <td>${project.deadline ? new Date(project.deadline).toLocaleDateString() : ""}</td>
+            <td>${project.progress}%</td>
+            <td>
+                <button class="delete-btn"
+                    onclick="deleteProject('${project._id}')">Delete</button>
+            </td>
+        `;
+
+        table.appendChild(row);
+    });
+}
+
+async function addProject() {
+    const name = document.getElementById("name").value;
+    const owner = document.getElementById("owner").value;
+    const priority = document.getElementById("priority").value;
+    const status = document.getElementById("status").value;
+    const deadline = document.getElementById("deadline").value;
+    const progress = document.getElementById("progress").value;
+
+    await fetch("/addProject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, owner, priority, status, deadline, progress })
+    });
+
+    loadProjects();
+}
+
+async function deleteProject(id) {
+    await fetch(`/deleteProject/${id}`, { method: "DELETE" });
+    loadProjects();
+}
+
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+
+loadProjects();
+</script>
+
+</body>
+</html>
