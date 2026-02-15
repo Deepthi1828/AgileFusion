@@ -11,16 +11,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // ================= MONGODB CONNECTION =================
-mongoose.connect(
-  "mongodb+srv://subravetideepthi_db_user:Deepthi123@cluster0.msllncb.mongodb.net/agilefusion?retryWrites=true&w=majority"
-)
-<<<<<<< HEAD
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log("✅ MongoDB Connected Successfully"))
 .catch((err) => console.log("❌ MongoDB Connection Error:", err));
-=======
-.then(() => console.log(" MongoDB Connected Successfully"))
-.catch((err) => console.log(" MongoDB Connection Error:", err));
->>>>>>> 321f8b12415904aee4a2423d94cba86ac8aaf89d
 
 // ================= USER SCHEMA =================
 const userSchema = new mongoose.Schema({
@@ -196,9 +189,5 @@ app.delete("/deleteTask/:id", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-<<<<<<< HEAD
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-=======
-  console.log(` Server running on http://localhost:${PORT}`);
->>>>>>> 321f8b12415904aee4a2423d94cba86ac8aaf89d
 });
