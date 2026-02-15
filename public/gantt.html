@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgileFusion - Gantt Chart</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-link {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: 230px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* ===== GANTT TABLE ===== */
+        .gantt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .gantt-table th, .gantt-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .timeline {
+            position: relative;
+            height: 25px;
+            background: #e5e7eb;
+            border-radius: 20px;
+        }
+
+        .bar {
+            position: absolute;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .planning { background: #7c3aed; }
+        .progress { background: #f59e0b; }
+        .completed { background: #16a34a; }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="logo">🚀 AgileFusion</div>
+
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="kanban.html" class="nav-link">Kanban</a>
+    <a href="sprints.html" class="nav-link">Sprints</a>
+    <a href="gantt.html" class="nav-link active">Gantt Chart</a>
+    <a href="reports.html" class="nav-link">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <div>Project Timeline (Gantt View)</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+
+        <div class="card">
+            <h3>Project Roadmap - Q1 2026</h3>
+
+            <table class="gantt-table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Owner</th>
+                        <th>Timeline</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Authentication Module</td>
+                        <td>Deepthi</td>
+                        <td>
+                            <div class="timeline">
+                                <div class="bar completed" style="left: 0%; width: 30%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Kanban Drag & Drop</td>
+                        <td>UI Team</td>
+                        <td>
+                            <div class="timeline">
+                                <div class="bar progress" style="left: 25%; width: 35%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Reports & Analytics</td>
+                        <td>Backend Team</td>
+                        <td>
+                            <div class="timeline">
+                                <div class="bar planning" style="left: 55%; width: 30%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Deployment & CI/CD</td>
+                        <td>DevOps</td>
+                        <td>
+                            <div class="timeline">
+                                <div class="bar planning" style="left: 75%; width: 20%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
