@@ -30,7 +30,7 @@ AgileFusion merges these functionalities into a hybrid project management system
 - MongoDB Atlas (Cloud Database)
 
 ### Security
-- bcrypt (Password hashing)
+- bcryptjs (Password hashing)
 
 ## ✨ Features
 
