@@ -102,7 +102,7 @@ npm install
 node server.js
 
 ### 4️⃣ Open in Browser
-http://localhost:5000
+https://agilefusion-deepthi.onrender.com
 
 ## 🌍 Deployment
 
