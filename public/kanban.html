@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgileFusion - Kanban</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-link {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: 230px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        /* ===== BOARD ===== */
+        .board {
+            display: flex;
+            gap: 20px;
+        }
+
+        .column {
+            flex: 1;
+            background: #ebecf0;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 450px;
+        }
+
+        .column h3 {
+            margin-top: 0;
+            font-size: 15px;
+        }
+
+        .task-card {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: grab;
+        }
+
+        .task-card h4 {
+            margin: 0 0 5px;
+            font-size: 14px;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .high { background: #de350b; }
+        .medium { background: #ff991f; }
+        .low { background: #36b37e; }
+
+        .delete-btn {
+            float: right;
+            font-size: 12px;
+            color: red;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 45%;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .modal input, .modal select {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="logo">🚀 AgileFusion</div>
+
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="kanban.html" class="nav-link active">Kanban</a>
+    <a href="sprints.html" class="nav-link">Sprints</a>
+    <a href="reports.html" class="nav-link">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <div>Kanban Board</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+
+        <button class="btn" onclick="openModal()">+ Add Task</button>
+
+        <div class="board">
+
+            <div class="column" id="todo" data-status="To Do">
+                <h3>To Do</h3>
+            </div>
+
+            <div class="column" id="inprogress" data-status="In Progress">
+                <h3>In Progress</h3>
+            </div>
+
+            <div class="column" id="completed" data-status="Completed">
+                <h3>Completed</h3>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="taskModal">
+    <h3>Add Task</h3>
+
+    <input type="text" id="title" placeholder="Task Title">
+    <input type="text" id="owner" placeholder="Owner">
+
+    <select id="priority">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+
+    <select id="status">
+        <option value="To Do">To Do</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select>
+
+    <button class="btn" onclick="addTask()">Save</button>
+</div>
+
+<script>
+const columns = document.querySelectorAll(".column");
+
+columns.forEach(col => {
+    col.addEventListener("dragover", e => e.preventDefault());
+    col.addEventListener("drop", drop);
+});
+
+function openModal() {
+    document.getElementById("taskModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("taskModal").style.display = "none";
+}
+
+async function addTask() {
+    const title = document.getElementById("title").value;
+    const owner = document.getElementById("owner").value;
+    const priority = document.getElementById("priority").value;
+    const status = document.getElementById("status").value;
+
+    await fetch("/addTask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, owner, priority, status })
+    });
+
+    closeModal();
+    loadTasks();
+}
+
+async function loadTasks() {
+    const res = await fetch("/tasks");
+    const tasks = await res.json();
+
+    document.getElementById("todo").innerHTML = "<h3>To Do</h3>";
+    document.getElementById("inprogress").innerHTML = "<h3>In Progress</h3>";
+    document.getElementById("completed").innerHTML = "<h3>Completed</h3>";
+
+    tasks.forEach(task => {
+        const card = document.createElement("div");
+        card.className = "task-card";
+        card.draggable = true;
+        card.dataset.id = task._id;
+
+        card.innerHTML = `
+            <span class="delete-btn"
+                onclick="event.stopPropagation(); deleteTask('${task._id}')">✖</span>
+            <h4>${task.title}</h4>
+            <p>Owner: ${task.owner}</p>
+            <span class="priority ${task.priority.toLowerCase()}">
+                ${task.priority}
+            </span>
+        `;
+
+        card.addEventListener("dragstart", e => {
+            e.dataTransfer.setData("id", task._id);
+        });
+
+        if (task.status === "To Do") {
+            document.getElementById("todo").appendChild(card);
+        }
+        else if (task.status === "In Progress") {
+            document.getElementById("inprogress").appendChild(card);
+        }
+        else {
+            document.getElementById("completed").appendChild(card);
+        }
+    });
+}
+
+async function drop(e) {
+    const taskId = e.dataTransfer.getData("id");
+    const newStatus = e.currentTarget.dataset.status;
+
+    await fetch(`/updateTaskStatus/${taskId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
+    });
+
+    loadTasks();
+}
+
+async function deleteTask(id) {
+    await fetch(`/deleteTask/${id}`, { method: "DELETE" });
+    loadTasks();
+}
+
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+
+loadTasks();
+</script>
+
+</body>
+</html>
