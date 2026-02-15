@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgileFusion - Sprints</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-link {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: 230px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .sprint-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            padding: 18px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .blue { background: #2563eb; }
+        .green { background: #16a34a; }
+        .orange { background: #f59e0b; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .status-active {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .status-upcoming {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="logo">🚀 AgileFusion</div>
+
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="kanban.html" class="nav-link">Kanban</a>
+    <a href="sprints.html" class="nav-link active">Sprints</a>
+    <a href="reports.html" class="nav-link">Reports</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <div>Sprint Management</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+
+        <!-- Sprint Stats -->
+        <div class="sprint-stats">
+
+            <div class="stat-box blue">
+                <h3>Total Sprints</h3>
+                <h2>4</h2>
+            </div>
+
+            <div class="stat-box green">
+                <h3>Active Sprint</h3>
+                <h2>Sprint 3</h2>
+            </div>
+
+            <div class="stat-box orange">
+                <h3>Completed Sprints</h3>
+                <h2>2</h2>
+            </div>
+
+        </div>
+
+        <!-- Sprint Table -->
+        <div class="card">
+            <h3>Sprint Timeline</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sprint</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Story Points</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Sprint 1</td>
+                        <td>01 Jan 2026</td>
+                        <td>14 Jan 2026</td>
+                        <td>20</td>
+                        <td class="status-completed">Completed</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sprint 2</td>
+                        <td>15 Jan 2026</td>
+                        <td>28 Jan 2026</td>
+                        <td>25</td>
+                        <td class="status-completed">Completed</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sprint 3</td>
+                        <td>01 Feb 2026</td>
+                        <td>14 Feb 2026</td>
+                        <td>30</td>
+                        <td class="status-active">Active</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sprint 4</td>
+                        <td>15 Feb 2026</td>
+                        <td>28 Feb 2026</td>
+                        <td>35</td>
+                        <td class="status-upcoming">Upcoming</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
