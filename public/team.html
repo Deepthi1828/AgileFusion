@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AgileFusion - Team</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-link {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .main {
+            margin-left: 230px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: 60px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logout-btn {
+            padding: 6px 12px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+            max-width: 1200px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .role {
+            font-size: 13px;
+            color: gray;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">🚀 AgileFusion</div>
+
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="kanban.html" class="nav-link">Kanban</a>
+    <a href="sprints.html" class="nav-link">Sprints</a>
+    <a href="gantt.html" class="nav-link">Gantt</a>
+    <a href="reports.html" class="nav-link">Reports</a>
+    <a href="team.html" class="nav-link active">Team</a>
+</div>
+
+<div class="main">
+
+    <div class="topbar">
+        <div>Team Members</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="content">
+
+        <div class="team-grid">
+
+            <div class="card">
+                <h3>Deepthi</h3>
+                <div class="role">Project Manager</div>
+                <p>Leads sprint planning and oversees execution.</p>
+            </div>
+
+            <div class="card">
+                <h3>Rahul</h3>
+                <div class="role">Frontend Developer</div>
+                <p>Responsible for UI & user experience design.</p>
+            </div>
+
+            <div class="card">
+                <h3>Anjali</h3>
+                <div class="role">Backend Developer</div>
+                <p>Handles APIs and database management.</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
