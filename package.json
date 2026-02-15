@@ -11,7 +11,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^3.0.3",
+=======
+    "bcrypt": "^6.0.0",
+>>>>>>> 321f8b12415904aee4a2423d94cba86ac8aaf89d
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
