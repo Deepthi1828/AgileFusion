@@ -91,7 +91,7 @@ MongoDB Atlas (Database)
 ## 🚀 How to Run Locally
 
 ### 1️⃣ Clone the Repository
-git clone https://github.com/yourusername/AgileFusion.git
+git clone https://github.com/Deepthi1828/AgileFusion.git
 
 cd AgileFusion
 
